@@ -31,38 +31,16 @@ A modern REST API boilerplate built with Rust, featuring:
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd go-api-boilerplate/rust
+cd rust-api-boilerplate
 ```
 
-2. Set up environment variables:
+2. Start the application with Docker Compose:
 ```bash
-cp .env.example .env
-# Edit .env with your database configuration
-```
-
-3. Run database migrations:
-```bash
-cargo run --bin migration
-```
-
-4. Start the server:
-```bash
-cargo run
+make compose
 ```
 
 The API will be available at `http://localhost:8080`
 
-## API Endpoints
-
-### Health Check
-- `GET /v1/health` - Check service health
-
-### Greetings
-- `GET /v1/greet/{name}` - Get a personalized greeting
-
-### Visits
-- `GET /v1/visits` - Get all visits
-- `POST /v1/visits` - Create a new visit
 
 ## API Documentation
 
@@ -132,26 +110,56 @@ docker run -p 8080:8080 rust-api
 ## Project Structure
 
 ```
-rust/
+rust-api-boilerplate/
 ├── src/
-│   ├── main.rs          # Application entry point
-│   ├── app.rs           # Application setup
-│   ├── config.rs        # Configuration management
-│   ├── database.rs      # Database connection
-│   ├── error.rs         # Error handling
-│   ├── handlers.rs      # Request handlers
-│   ├── middleware.rs    # Middleware setup
-│   ├── models.rs        # API models/DTOs
-│   ├── routes.rs        # Route definitions
-│   └── entities/        # Database entities
+│   ├── main.rs              # Application entry point
+│   ├── app.rs               # Application setup
+│   ├── middleware.rs        # Middleware setup
+│   ├── config/              # Configuration management
+│   │   ├── mod.rs
+│   │   ├── app.rs
+│   │   └── database.rs
+│   ├── database/            # Database connection and operations
+│   │   ├── mod.rs
+│   │   ├── connection.rs
+│   │   ├── health.rs
+│   │   └── migrate.rs
+│   ├── entities/            # Database entities
+│   │   ├── mod.rs
+│   │   └── visit.rs
+│   ├── error/               # Error handling
+│   │   ├── mod.rs
+│   │   └── app_error.rs
+│   ├── handlers/            # Request handlers
+│   │   ├── mod.rs
+│   │   ├── greeting.rs
+│   │   ├── health.rs
+│   │   └── visit.rs
+│   ├── models/              # API models/DTOs
+│   │   ├── mod.rs
+│   │   ├── common.rs
+│   │   ├── greeting.rs
+│   │   └── visit.rs
+│   ├── routes/              # Route definitions
+│   │   ├── mod.rs
+│   │   └── routes.rs
+│   ├── services/            # Business logic services
+│   │   ├── mod.rs
+│   │   ├── greeting.rs
+│   │   └── visit.rs
+│   └── utils/               # Utility functions
 │       ├── mod.rs
-│       └── visit.rs
-├── migration/           # Database migrations
+│       └── extractors.rs
+├── migration/               # Database migrations
 │   ├── src/
 │   │   ├── lib.rs
 │   │   └── m20220101_000001_create_visit_table.rs
 │   └── Cargo.toml
+├── tests/                   # Test files
 ├── Cargo.toml
+├── Dockerfile
+├── compose.yaml
+├── Makefile
 └── .env
 ```
 

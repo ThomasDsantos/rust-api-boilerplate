@@ -23,7 +23,7 @@ async fn main() {
     match dotenvy::dotenv() {
         Ok(_) => (),
         Err(e) => {
-            println!("{}", e)
+            println!("Can't read dotenv {}", e)
         }
     };
 

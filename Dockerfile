@@ -43,4 +43,3 @@ USER appuser
 EXPOSE ${SERVER_PORT}
 
 CMD [ "/app/rust-api-boilerplate" ]
-# CMD [ "/bin/sh" ]
