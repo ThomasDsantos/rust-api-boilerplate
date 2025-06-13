@@ -1,0 +1,78 @@
+services:
+  backend:
+    container_name: rust_boilerplate_backend
+    build:
+      context: .
+    # Temporarily disable restart to see crash logs
+    # restart: always
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_URL: postgres://admin:password@postgres:5432/database?sslmode=disable
+      SERVER_PORT: 8080
+      SERVER_ENVIRONMENT: compose
+      SERVER_API_BASE_PATH: /v1
+      RUST_LOG: debug
+      RUST_BACKTRACE: 1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - net
+    # Add this to see logs without restart
+    stdin_open: true
+    tty: true
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          target: /app/
+    profiles:
+      - backend
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: rust_boilerplate_postgres
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - psql_volume_bp:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U admin -d database'"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - net
+    profiles:
+      - backend
+      - data
+
+  postgres-pgweb:
+    container_name: rust_boilerplate_postgres_pgweb
+    image: sosedoff/pgweb:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - PGWEB_DATABASE_URL=postgres://admin:password@postgres:5432/database?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - net
+    profiles:
+      - backend
+      - data
+
+# volumes:
+#   psql_volume_bp:
+
+networks:
+  net:
+
