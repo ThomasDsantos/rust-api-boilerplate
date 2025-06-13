@@ -3,8 +3,7 @@ services:
     container_name: rust_boilerplate_backend
     build:
       context: .
-    # Temporarily disable restart to see crash logs
-    # restart: always
+    restart: always
     ports:
       - 8080:8080
     environment:
@@ -19,9 +18,6 @@ services:
         condition: service_healthy
     networks:
       - net
-    # Add this to see logs without restart
-    stdin_open: true
-    tty: true
     develop:
       watch:
         - action: rebuild

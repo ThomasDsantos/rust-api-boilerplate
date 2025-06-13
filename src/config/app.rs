@@ -2,6 +2,8 @@ use config::{Config, ConfigError, Environment};
 use serde::Deserialize;
 use std::env;
 
+use super::database::DatabaseConfig;
+
 #[derive(Debug, Deserialize, Clone)]
 pub struct AppConfig {
     pub server: ServerConfig,
@@ -15,11 +17,6 @@ pub struct ServerConfig {
     pub api_base_path: String,
     pub service_name: String,
     pub environment: String,
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct DatabaseConfig {
-    pub url: String,
 }
 
 impl AppConfig {
@@ -45,5 +42,4 @@ impl AppConfig {
         Ok(app_config)
     }
 }
-
 

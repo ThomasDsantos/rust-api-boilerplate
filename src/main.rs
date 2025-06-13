@@ -1,7 +1,6 @@
 use tokio::signal;
 use tracing::{info, error};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use std::io::{stdout, Write};
 
 mod app;
 mod config;
@@ -12,6 +11,8 @@ mod routes;
 mod middleware;
 mod error;
 mod entities;
+mod services;
+mod utils;
 
 use app::App;
 use config::AppConfig;
