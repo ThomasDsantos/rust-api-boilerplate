@@ -20,7 +20,12 @@ use config::AppConfig;
 #[tokio::main]
 async fn main() {
     // Load environment variables
-    dotenvy::dotenv().ok();
+    match dotenvy::dotenv() {
+        Ok(_) => (),
+        Err(e) => {
+            println!("{}", e)
+        }
+    };
 
     // Initialize tracing
     tracing_subscriber::registry()

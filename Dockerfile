@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY Cargo.toml Cargo.lock ./
+COPY migration ./migration
 
 # Create a dummy main.rs to build dependencies
 # Build dependencies (this layer will be cached unless Cargo.toml changes)
@@ -17,7 +18,6 @@ RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo build --release && rm -rf src
 
 COPY src ./src
-COPY migration ./migration
 
 RUN cargo build --release
 
@@ -42,4 +42,5 @@ USER appuser
 
 EXPOSE ${SERVER_PORT}
 
-CMD [ "./rust-api-boilerplate" ]
+CMD [ "/app/rust-api-boilerplate" ]
+# CMD [ "/bin/sh" ]

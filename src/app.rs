@@ -20,6 +20,10 @@ impl App {
     pub async fn new(config: AppConfig) -> Result<Self, AppError> {
         // Connect to database
         let db = database::connect(&config.database).await?;
+        
+        // Run database migrations
+        database::run_migrations(&db).await?;
+        
         let db = Arc::new(db);
 
         Ok(Self { config, db })
